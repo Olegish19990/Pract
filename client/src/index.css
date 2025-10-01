@@ -23,8 +23,8 @@ a:hover {
 }
 
 mark {
-  background: #ffe082;   /* мягкий жёлтый */
-  color: #000;           /* контрастный текст */
+  background: #ffe082;  
+  color: #000;          
   padding: 0 .15em;
   border-radius: 3px;
 }
