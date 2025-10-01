@@ -12,7 +12,6 @@ export default function Modal({ open, onClose, title = "Діалог", children 
 
     lastFocused.current = document.activeElement;
 
-    // автофокус внутрь модалки
     const timer = setTimeout(() => {
       const focusable = dialogRef.current?.querySelector(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
