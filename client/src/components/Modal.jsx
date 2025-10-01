@@ -1,12 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-/**
- * Модалка с a11y:
- * - Esc/клик по фону закрывает
- * - trap Tab внутри диалога
- * - возвращает фокус инициатору
- */
+
 export default function Modal({ open, onClose, title = "Діалог", children }) {
   const overlayRef = useRef(null);
   const dialogRef = useRef(null);
