@@ -1,4 +1,4 @@
-import { courses } from "../data/courses.js";
+
 
 export default function Filters({
   query,

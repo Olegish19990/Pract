@@ -1,3 +1,6 @@
+// client/src/components/CourseCard.jsx
+
+import { Link } from "react-router-dom"; // 1. Імпортуємо Link
 import { highlight } from "../utils/highlight.jsx";
 
 export default function CourseCard({
@@ -8,12 +11,13 @@ export default function CourseCard({
   popularity,
   tags = [],
   query = "",
-  onSelect,
+  // 2. onSelect видалено з пропсів
 }) {
   return (
     <article className="card" aria-label={`Курс ${title}`}>
       <header className="card__header">
-        <h3
+        {/* ... (незмінно) ... */}
+         <h3
           className="card__title"
           dangerouslySetInnerHTML={{ __html: highlight(title, query) }}
         />
@@ -22,6 +26,7 @@ export default function CourseCard({
         </span>
       </header>
       <div className="card__body">
+        {/* ... (незмінно) ... */}
         <p className="card__row">
           <strong>Ціна:</strong> {price.toLocaleString("uk-UA")} ₴
         </p>
@@ -39,13 +44,14 @@ export default function CourseCard({
         )}
       </div>
       <div className="card__footer">
-        <button
-          type="button"
-          onClick={() => onSelect?.(id)}
+        {/* 3. Замінюємо <button> на <Link> */}
+        <Link
+          to={`/course/${id}`}
+          className="button" /* Можете додати клас, щоб Link виглядав як кнопка */
           aria-label={`Детальніше про ${title}`}
         >
           Детальніше
-        </button>
+        </Link>
       </div>
     </article>
   );
