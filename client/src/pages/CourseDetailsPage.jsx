@@ -1,4 +1,3 @@
-// client/src/pages/CourseDetailsPage.jsx
 
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -6,7 +5,7 @@ import { useParams, Link } from "react-router-dom";
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
 
 export default function CourseDetailsPage() {
-  const { id } = useParams(); // Отримуємо { id: "..." } з URL
+  const { id } = useParams(); 
   
   const [details, setDetails] = useState(null);
   const [status, setStatus] = useState("idle");
@@ -23,8 +22,7 @@ export default function CourseDetailsPage() {
         const res = await fetch(`${API_BASE}/api/courses/${id}`, {
           signal: ac.signal,
         });
-        
-        // Обробка неіснуючого ID (вимога UX)
+      
         if (res.status === 404) {
           throw new Error("404");
         }
@@ -48,7 +46,7 @@ export default function CourseDetailsPage() {
     }
     run();
     return () => ac.abort();
-  }, [id]); // Ефект залежить від id
+  }, [id]); 
 
   return (
     <div>

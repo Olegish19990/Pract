@@ -1,7 +1,6 @@
 
 import { NavLink, Outlet } from "react-router-dom";
 
-// Функція для визначення активного класу NavLink
 const getNavLinkClass = ({ isActive }) => {
   return isActive ? "nav-link active" : "nav-link";
 };
@@ -9,13 +8,11 @@ const getNavLinkClass = ({ isActive }) => {
 export default function RootLayout() {
   return (
     <>
-      {/* Хедер з навігацією */}
       <header className="header">
         <nav className="container nav-bar">
           <span className="nav-logo">CourseHub</span>
           <ul className="nav-links">
             <li>
-              {/* 'end' потрібен, щоб / не був активним на /about */}
               <NavLink to="/" className={getNavLinkClass} end>
                 Каталог
               </NavLink>
@@ -29,12 +26,10 @@ export default function RootLayout() {
         </nav>
       </header>
 
-      {/* Основний контент (сюди рендеряться сторінки) */}
-      <main className="container">
+      <main className="container main">
         <Outlet />
       </main>
 
-      {/* Футер */}
       <footer className="footer">
         <div className="container">
           <p>&copy; {new Date().getFullYear()} CourseHub. Усі права захищено.</p>
