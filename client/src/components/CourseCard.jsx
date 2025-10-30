@@ -1,7 +1,6 @@
-
-
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { highlight } from "../utils/highlight.jsx";
+import { useCart } from "../context/cart-context.jsx";
 
 export default function CourseCard({
   id,
@@ -11,13 +10,18 @@ export default function CourseCard({
   popularity,
   tags = [],
   query = "",
-  
 }) {
+  const { addItem, items } = useCart();
+  const isInCart = items.some((item) => item.id === id);
+
+  const handleAdd = () => {
+    addItem({ id, title, price });
+  };
+
   return (
     <article className="card" aria-label={`Курс ${title}`}>
       <header className="card__header">
-       
-         <h3
+        <h3
           className="card__title"
           dangerouslySetInnerHTML={{ __html: highlight(title, query) }}
         />
@@ -26,7 +30,6 @@ export default function CourseCard({
         </span>
       </header>
       <div className="card__body">
-     
         <p className="card__row">
           <strong>Ціна:</strong> {price.toLocaleString("uk-UA")} ₴
         </p>
@@ -43,15 +46,26 @@ export default function CourseCard({
           </ul>
         )}
       </div>
+
       <div className="card__footer">
-      
         <Link
           to={`/course/${id}`}
-          className="button" 
-          aria-label={`Детальніше про ${title}`}
+          className="button"
+          style={{ marginRight: 8 }}
         >
           Детальніше
         </Link>
+        <button
+          type="button"
+          className="button"
+          onClick={handleAdd}
+          disabled={isInCart}
+          aria-label={
+            isInCart ? `Курс ${title} вже у кошику` : `Додати ${title} у кошик`
+          }
+        >
+          {isInCart ? "У кошику" : "Додати"}
+        </button>
       </div>
     </article>
   );

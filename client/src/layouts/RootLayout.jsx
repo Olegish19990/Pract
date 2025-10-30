@@ -1,11 +1,13 @@
-
 import { NavLink, Outlet } from "react-router-dom";
+import { useCart } from "../context/cart-context.jsx";
 
 const getNavLinkClass = ({ isActive }) => {
   return isActive ? "nav-link active" : "nav-link";
 };
 
 export default function RootLayout() {
+  const { totalItems } = useCart();
+
   return (
     <>
       <header className="header">
@@ -22,11 +24,24 @@ export default function RootLayout() {
                 Про нас
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/cart" className={getNavLinkClass}>
+                Кошик
+                {totalItems > 0 && (
+                  <span
+                    className="cart-badge"
+                    aria-label={`(${totalItems} товарів у кошику)`}
+                  >
+                    {totalItems}
+                  </span>
+                )}
+              </NavLink>
+            </li>
           </ul>
         </nav>
       </header>
 
-      <main className="container main">
+      <main className="container">
         <Outlet />
       </main>
 
