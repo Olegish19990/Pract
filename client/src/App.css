@@ -403,3 +403,72 @@ mark {
   justify-content: flex-end;
   gap: 1rem;
 }
+
+.apply-form {
+  max-width: 600px;
+  margin: 2rem 0;
+}
+
+.apply-form .field {
+  margin-bottom: 1.25rem;
+}
+
+.apply-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.apply-form input[type="text"],
+.apply-form input[type="email"],
+.apply-form input[type="tel"],
+.apply-form select,
+.apply-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.apply-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.error-message {
+  color: #d93025;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.apply-form input[aria-invalid="true"],
+.apply-form select[aria-invalid="true"],
+.apply-form textarea[aria-invalid="true"] {
+  border-color: #d93025;
+  box-shadow: 0 0 0 1px #d93025;
+}
+
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+}

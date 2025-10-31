@@ -25,6 +25,11 @@ export default function RootLayout() {
               </NavLink>
             </li>
             <li>
+              <NavLink to="/apply" className={getNavLinkClass}>
+                Заявка
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/cart" className={getNavLinkClass}>
                 Кошик
                 {totalItems > 0 && (
