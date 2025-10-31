@@ -9,7 +9,7 @@ const multer = require("multer");
 const app = express();
 const PORT = 3000;
 const CLIENT_ORIGIN = "http://localhost:5173";
-const JWT_SECRET = "your-very-secret-key-change-it";
+const JWT_SECRET = "asdasdsadasd";
 
 const DATA_DIR = path.join(__dirname, "data");
 const UPLOADS_DIR = path.join(__dirname, "uploads");
