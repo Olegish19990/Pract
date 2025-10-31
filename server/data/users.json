@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "email": "admin@example.com",
+    "password": "adminpassword",
+    "name": "Admin User",
+    "role": "admin",
+    "avatarUrl": "/uploads/avatar-1-1761875762019-217945202.jpg"
+  },
+  {
+    "id": 2,
+    "email": "user@example.com",
+    "password": "userpassword",
+    "name": "Regular User",
+    "role": "user"
+  }
+]

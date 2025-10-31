@@ -23,7 +23,8 @@ export default function ApplyPage() {
         const res = await fetch(`${API_BASE}/api/courses`);
         if (!res.ok) throw new Error("Failed to fetch courses");
         const data = await res.json();
-        setCourses(data);
+        setCourses(data.items || []); 
+
       } catch (e) {
         console.error(e);
         setGlobalMessage("Помилка: не вдалося завантажити список курсів.");

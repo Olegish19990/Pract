@@ -1,21 +1,24 @@
-
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import CourseCard from "../components/CourseCard.jsx";
 import Filters from "../components/Filters.jsx";
-import CourseList from "../components/CourseList.jsx";
-
+import Pagination from "../components/Pagination.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+const CARD_HEIGHT = 300;
 
 export default function CatalogPage() {
- 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
-  const [sortBy, setSortBy] = useState("none");
+  const [sortBy, setSortBy] = useState("popularity");
+  const [order, setOrder] = useState("desc");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(9);
 
   const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
-
 
   useEffect(() => {
     const ac = new AbortController();
@@ -23,12 +26,26 @@ export default function CatalogPage() {
       try {
         setStatus("loading");
         setError("");
-        const res = await fetch(`${API_BASE}/api/courses`, {
+
+        const params = new URLSearchParams({
+          query,
+          page,
+          limit,
+          sort: sortBy,
+          order,
+        });
+
+        if (category !== "all") params.append("category", category);
+
+        const res = await fetch(`${API_BASE}/api/courses?${params.toString()}`, {
           signal: ac.signal,
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        setItems(data);
+
+        setItems(data.items);
+        setTotal(data.total);
+        setTotalPages(data.totalPages);
         setStatus("success");
       } catch (e) {
         if (e.name === "AbortError") return;
@@ -38,60 +55,54 @@ export default function CatalogPage() {
     }
     run();
     return () => ac.abort();
-  }, []);
+  }, [query, category, sortBy, order, page, limit]);
 
-
-  const categories = useMemo(
-    () => Array.from(new Set(items.map((c) => c.category))),
-    [items]
-  );
-
-  const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    let list = items.filter((c) => {
-      const inTitle = c.title.toLowerCase().includes(q);
-      const inTags = c.tags?.some((t) => t.toLowerCase().includes(q));
-      const catOk = category === "all" || c.category === category;
-      return catOk && (q === "" || inTitle || inTags);
-    });
- 
-    switch (sortBy) {
-      case "price-asc":
-        list.sort((a, b) => a.price - b.price);
-        break;
-      case "price-desc":
-        list.sort((a, b) => b.price - a.price);
-        break;
-      case "pop-asc":
-        list.sort((a, b) => a.popularity - b.popularity);
-        break;
-      case "pop-desc":
-        list.sort((a, b) => b.popularity - a.popularity);
-        break;
-      case "title-asc":
-        list.sort((a, b) => a.title.localeCompare(b.title, "uk"));
-        break;
-      case "title-desc":
-        list.sort((a, b) => b.title.localeCompare(a.title, "uk"));
-        break;
-      default:
-        break;
+  const handleSortChange = (newSortBy) => {
+    if (newSortBy.includes("-")) {
+      const [sort, newOrder] = newSortBy.split("-");
+      setSortBy(sort);
+      setOrder(newOrder);
+    } else {
+      setSortBy(newSortBy);
+      setOrder("asc");
     }
-    return list;
-  }, [items, query, category, sortBy]);
+    setPage(1);
+  };
+
+  const handleQueryChange = (newQuery) => {
+    setQuery(newQuery);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  const Row = ({ index, style }) => {
+    const course = items[index];
+    return (
+      <div style={{ ...style, padding: "10px" }}>
+        <CourseCard {...course} query={query} />
+      </div>
+    );
+  };
+
+  const listHeight = Math.ceil(items.length / 3) * (CARD_HEIGHT + 20);
 
   return (
     <>
       <h1>Каталог курсів</h1>
+      <p>Знайдено: {total} курсів</p>
 
       <Filters
         query={query}
-        onQueryChange={setQuery}
+        onQueryChange={handleQueryChange}
         category={category}
         onCategoryChange={setCategory}
-        categories={categories}
-        sortBy={sortBy}
-        onSortByChange={setSortBy}
+        sortBy={`${sortBy}-${order}`}
+        onSortByChange={handleSortChange}
       />
 
       {status === "loading" && (
@@ -100,19 +111,35 @@ export default function CatalogPage() {
         </div>
       )}
       {status === "error" && (
-        <div className="empty" role="status">
+        <div className="empty" role="alert">
           Сталася помилка: {error}
-          <div style={{ marginTop: 8 }}>
-            <button onClick={() => window.location.reload()}>
-              Спробувати знову
-            </button>
-          </div>
         </div>
       )}
       {status === "success" && (
-        <CourseList items={visible} query={query} />
-      )}
-      
+  <>
+    {items.length === 0 ? (
+      <div className="empty">Курсів не знайдено</div>
+    ) : (
+      /* ВМЕСТО <List ...> ИСПОЛЬЗУЙТЕ ОБЫЧНЫЙ .MAP()
+        (Возможно, вам понадобится вернуть стили для .course__list из прошлых практикумов, 
+        чтобы карточки снова стали в 3 колонки)
+      */
+      <div className="course__list">
+        {items.map((course) => (
+          <div key={course.id} className="list__item">
+            <CourseCard {...course} query={query} />
+          </div>
+        ))}
+      </div>
+    )}
+
+    <Pagination
+      page={page}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    />
+  </>
+)}
     </>
   );
 }
