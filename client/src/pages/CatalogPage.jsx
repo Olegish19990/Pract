@@ -120,10 +120,7 @@ export default function CatalogPage() {
     {items.length === 0 ? (
       <div className="empty">Курсів не знайдено</div>
     ) : (
-      /* ВМЕСТО <List ...> ИСПОЛЬЗУЙТЕ ОБЫЧНЫЙ .MAP()
-        (Возможно, вам понадобится вернуть стили для .course__list из прошлых практикумов, 
-        чтобы карточки снова стали в 3 колонки)
-      */
+   
       <div className="course__list">
         {items.map((course) => (
           <div key={course.id} className="list__item">
